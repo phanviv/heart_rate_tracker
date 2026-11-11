@@ -3,10 +3,8 @@
 using namespace std;
 
 // Constructor: saves the time and bpm when a Reading is created
-Reading::Reading(time_t t, int b)
+Reading::Reading(long timestamp, int bpm) : timestamp(timestamp), bpm(bpm)
 {
-    timestamp = t;
-    bpm = b;
 }
 
 // Returns the time the reading was taken
@@ -16,7 +14,7 @@ time_t Reading::getTimestamp() const
 }
 
 // Returns the heart rate
-int Reading::getBpm() const
+int Reading::getBPM() const
 {
     return bpm;
 }

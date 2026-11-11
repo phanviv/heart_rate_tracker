@@ -1,7 +1,6 @@
 #ifndef READING_H
 #define READING_H
 
-
 class Reading
 {
 
@@ -10,9 +9,10 @@ private:
     int bpm;
 
 public:
-    long getTimestamp();
-    int getBPM();
-    void print();
+    Reading(long timestamp, int bpm);
+    long getTimestamp() const;
+    int getBPM() const;
+    void print() const;
+};
 
-}
-#endif 
+#endif
