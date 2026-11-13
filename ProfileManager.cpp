@@ -104,6 +104,11 @@ bool ProfileManager::selectProfile(int index)
 	return true;
 }
 
+void ProfileManager::signOut()
+{
+	currentIndex = -1;
+}
+
 bool ProfileManager::hasCurrent() const
 {
 	return validIndex(currentIndex);
