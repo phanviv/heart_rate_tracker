@@ -39,6 +39,9 @@ public:
 	// Switches to an existing profile. Returns false if the index is invalid.
 	bool selectProfile(int index);
 
+	// Nobody is signed in afterwards.
+	void signOut();
+
 	bool hasCurrent() const;
 	// Only call when hasCurrent() is true.
 	UserProfile &getCurrent();
