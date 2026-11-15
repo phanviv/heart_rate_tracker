@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include "ReadingLog.h"
-#include "reading.h"
+#include "Reading.h"
 
 using namespace std;
 
