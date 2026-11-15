@@ -1,7 +1,7 @@
 #ifndef READING_LOG_H
 #define READING_LOG_H
 #include <vector>
-#include "reading.h"
+#include "Reading.h"
 using namespace std;
 
 class ReadingLog

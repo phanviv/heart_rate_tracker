@@ -1,7 +1,8 @@
 #ifndef ALERT_SYSTEM_H
 #define ALERT_SYSTEM_H
-#include "user.h"
-#include "reading.h"
+#include "UserProfile.h"
+#include "Reading.h"
+#include "ReadingLog.h"
 
 class AlertSystem
 {

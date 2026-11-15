@@ -2,8 +2,8 @@
 #define HEART_RATE_SENSOR_H
 #include <ctime>
 #include "ReadingLog.h"
-#include "reading.h"
-#include "user.h"
+#include "Reading.h"
+#include "UserProfile.h"
 
 // Produces heart rate readings in real time. For now the BPM values are
 // simulated; later they could come from a data file or a real sensor

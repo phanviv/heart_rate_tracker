@@ -1,4 +1,4 @@
-#include "reading.h"
+#include "Reading.h"
 #include <iostream>
 using namespace std;
 

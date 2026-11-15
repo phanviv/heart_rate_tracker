@@ -1,6 +1,6 @@
 #ifndef PROFILE_MANAGER_H
 #define PROFILE_MANAGER_H
-#include "user.h"
+#include "UserProfile.h"
 // TODO #include "Settings.h"
 
 // Holds every profile and tracks which one is signed in.
