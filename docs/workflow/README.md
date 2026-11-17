@@ -108,3 +108,59 @@ You're ready for the next issue!
 - **Working on `main` by accident.** Check with `git branch`. If you haven't committed yet, run `git switch -c <new-branch>` and your changes come with you.
 - **Forgetting to pull first.** Always run `git pull` on `main` before creating a branch.
 - **Merge conflicts.** These happen when two people change the same lines. Git marks the clash with `<<<<<<<`, `=======`, and `>>>>>>>`. Keep the code you want, delete the markers, then `add` and `commit`. If you're stuck, ask a teammate!
+
+# Heart Rate Tracker
+
+A C++ console program that tracks heart rate during workouts. Several profiles can be created and managed, each with its own settings and workout history. Readings are taken automatically (simulated for now), checked for alerts live, and saved automatically, with a backup file for crash recovery.
+
+Team: Vivian and Kai
+
+## Build and run
+
+Requires a C++ compiler (g++ with C++11 or newer).
+
+```
+g++ -std=c++11 *.cpp -o hrtracker
+./hrtracker
+```
+
+On Windows (MinGW):
+
+```
+g++ -std=c++11 *.cpp -o hrtracker.exe
+hrtracker.exe
+```
+
+## Menu
+
+```
+1  Manage profiles (create, switch, rename, delete)
+2  Start workout
+3  View latest readings
+4  Load data
+5  View workout history
+6  Statistics
+7  Heart rate zones
+8  Alerts
+0  Exit
+```
+
+Data loads automatically at start-up and saves automatically after every workout and profile change. If a workout was interrupted, the program offers to continue it, save it as finished, or discard it.
+
+## Data files (created when the program runs)
+
+- `heart_data.txt`: profiles, workouts, and readings
+- `settings.txt`: default and per-profile settings
+- `workout_backup.txt`: the workout in progress (deleted when it ends)
+
+## Project layout
+
+- `main.cpp`, `tasks.h`, `tasks_data.cpp`, `tasks_analysis.cpp`: menu and task functions
+- One `.h`/`.cpp` pair per class: `User` (UserProfile), `readings` (Reading), `readingl` (ReadingLog), `workout`, `settings`, `profilemanager`, `Sensor`, `alert`, `Filemanager`
+
+## Docs
+
+See the `docs/` folder:
+
+- `Iteration_3_Report.pdf`: task table, design, class diagram, status
+- `Iteration_3_Project_Plan.xlsx`: revised project plan
