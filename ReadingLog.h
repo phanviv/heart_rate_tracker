@@ -16,6 +16,7 @@ public:
 	void printLast(int n);
 
 	Reading get(int index) const;
+	vector<Reading> getReadings() const;
 	int size() const;
 	int minBpm() const;
 	int maxBpm() const;
