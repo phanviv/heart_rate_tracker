@@ -35,7 +35,7 @@ public:
     // TODO void setSettings(Settings newSettings);
 
     void addWorkout(Workout workout);
-    vector<Workout> getWorkouts() const;
+    const vector<Workout> &getWorkouts() const;
     Workout getLatestWorkout() const;
 
     bool hasWorkouts() const;
