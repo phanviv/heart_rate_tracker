@@ -25,29 +25,27 @@ A typical session goes through these steps:
 
 1. **Start up.** The program automatically loads all profiles and workouts from the [data file](#profile-and-workout-data) and each profile's settings from the [settings file](#settings-file). If a file is missing, it starts empty or uses the default settings. If it finds a [workout backup](#recovering-an-unfinished-workout) left by a workout that never finished, it asks the user whether to continue that workout.
 2. **Sign in.** The user creates a new `UserProfile` (Name, Age, Resting HR) or switches to an existing one. Every profile name must be unique. From the same menu, profiles can also be renamed or deleted. This menu is available any time no workout is running.
-3. **Start a workout.** A profile is required. The user types an **activity** label for the workout (any text, e.g. "Swim", "Run", "Jog"), and a new `Workout` begins for the current profile.
-4. **Track heart rate.** The `HeartRateSensor` takes a reading **automatically** at the interval in the current profile's settings (5 seconds by default). Pressing **Enter** takes a reading immediately. Each `Reading` is stamped with the real time it was taken and checked by the `AlertSystem`, and any alert is shown immediately. The workout so far is copied to a **backup file** at a regular interval (every 30 seconds by default).
-5. **Stop.** The user presses **q** or **Space**. No Enter is needed. The readings are saved into the `Workout`, which is added to the profile's workout history and **saved to the files automatically**. The backup file is then deleted, and a summary is shown.
+3. **Start a workout.** A profile is required. The user types an **activity** label for the workout (any text, e.g. "Swim", "Run", "Jog") and the workout's **length in minutes**, and a new `Workout` begins for the current profile.
+4. **Track heart rate.** The `HeartRateSensor` takes a reading **automatically** at the interval in the current profile's settings (5 seconds by default). No key presses are needed or read during a workout. Each `Reading` is stamped with the real time it was taken and checked by the `AlertSystem`, and any alert is shown immediately. The workout so far is copied to a **backup file** at a regular interval (every 30 seconds by default).
+5. **Finish.** When the chosen length is up, the workout ends by itself. The readings are saved into the `Workout`, which is added to the profile's workout history and **saved to the files automatically**. The backup file is then deleted, and a summary is shown. To stop early, see [Stopping a workout early](#stopping-a-workout-early).
 6. **Review.** From the menu the user can view their history, statistics, time in each heart rate zone, and alerts.
 
 ### Workout loop
 
-The workout runs in a loop that never waits for input, so automatic readings keep coming while the program watches for key presses:
+The workout length is asked for **before** the loop starts, so the loop never needs to read input. It runs until the chosen time is up:
 
 ```text
 set up the sensor and alerts from the current profile's settings
-start the sensor and switch the keyboard to single-key mode
+start the sensor
 note the time the loop started (used to count active time)
-while the sensor is running:
+end time = loop start time + the workout length
+while the current time is before the end time:
     if the reading interval has passed since the last reading:
         take a reading, show it, check it for alerts
-    if a key was pressed:
-        Enter     -> take a reading now (the next automatic one comes a full interval later)
-        q / Space -> stop the sensor
     if the backup interval has passed since the last backup:
         write the workout so far, including its active time, to the backup file
     pause briefly (about 50 ms) so the loop doesn't use 100% CPU
-switch the keyboard back to normal mode
+stop the sensor
 add the time since the loop started to the workout's active time
 store the readings in a new Workout on the current profile
 save all data to the files
@@ -57,6 +55,12 @@ delete the backup file
 The backup file is deleted only **after** the workout has been saved to `heart_data.txt`, so the readings are always in at least one of the two files.
 
 A workout's **duration** counts only the time the workout loop was actually running (its _active time_). Time when the program was closed, for example between an interruption and [continuing the workout](#recovering-an-unfinished-workout), is left out.
+
+The workout length must be a whole number of minutes, at least 1. If the user types anything else (text, 0, or a negative number), the input is cleared and they are asked again.
+
+### Stopping a workout early
+
+A workout can't be stopped from inside the program, because nothing is read from the keyboard while it runs. To stop early, the user presses **Ctrl+C** (or closes the window). This ends the program, and the backup file stays behind. At the next start-up the user chooses **Save it as a finished workout** in [Recovering an unfinished workout](#recovering-an-unfinished-workout). The readings taken since the last backup (at most one backup interval) are lost.
 
 ### Recovering an unfinished workout
 
@@ -71,7 +75,7 @@ An unfinished workout was found:
 3. Discard it
 ```
 
-- **1. Continue:** signs in to that profile and restarts the [workout loop](#workout-loop) with the same activity, start time, readings, and active time. New readings are added after the old ones, and active time keeps counting from where the backup left off. The time the program was closed is not counted.
+- **1. Continue:** signs in to that profile, asks how many more minutes to run, and restarts the [workout loop](#workout-loop) with the same activity, start time, readings, and active time. New readings are added after the old ones, and active time keeps counting from where the backup left off. The time the program was closed is not counted.
 - **2. Save as finished:** adds the workout to the profile's history, ending at the time of its last reading, with the active time from the backup, and saves it.
 - **3. Discard:** deletes the backup.
 
@@ -101,7 +105,7 @@ Options 1–4 handle **data** (profiles, workouts, loading). Options 5–8 handl
 ### Option details
 
 - **1. Manage profiles:** Lists the existing profiles and opens a small sub-menu (see [Managing profiles](#managing-profiles)).
-- **2. Start workout:** Asks for an activity label, then runs the [workout loop](#workout-loop), backing up the workout as it goes. When it finishes, it saves automatically and shows the average BPM, the average of the last 30 seconds, and the average of the last 5 readings.
+- **2. Start workout:** Asks for an activity label and a length in minutes, then runs the [workout loop](#workout-loop), backing up the workout as it goes. When it finishes, it saves automatically and shows the average BPM, the average of the last 30 seconds, and the average of the last 5 readings.
 - **3. View latest readings:** Shows the last few readings of the current profile's most recent workout.
 - **4. Load data:** Reloads everything from the files, **replacing** what is in memory. Data already loads automatically at start-up, so this is only needed after editing the files by hand while the program is running.
 - **5. View workout history:** Lists the current profile's workouts with the date, activity, duration (active time), and average BPM of each.
@@ -122,7 +126,7 @@ Option 1 opens this sub-menu. Every change is **saved to the files immediately**
 |   4    | Delete profile | Asks for confirmation (y/n), then removes the profile, its workouts, and its settings. Deleting the signed-in profile signs the user out.                       |
 |   0    | Back           | Returns to the main menu.                                                                                                                                       |
 
-Whenever the signed-in profile changes (switching, or deleting the current profile), the sensor's `ReadingLog` is **cleared** so no readings carry over from one profile to another. Since the menu can't be reached while a workout is running, a workout always has to be stopped first.
+Whenever the signed-in profile changes (switching, or deleting the current profile), the sensor's `ReadingLog` is **cleared** so no readings carry over from one profile to another. Since the menu can't be reached while a workout is running, a workout always has to finish first.
 
 ## 3. Architecture Overview
 
@@ -139,14 +143,12 @@ flowchart TD
     Reading["Reading<br/>timestamp, bpm"]
     Alert["AlertSystem"]
     FM["FileManager<br/>heart_data.txt, settings.txt,<br/>workout_backup.txt"]
-    Keys["Keyboard<br/>single-key input"]
 
     Main --> Tasks
     Tasks --> PM
     Tasks --> Sensor
     Tasks --> Alert
     Tasks --> FM
-    Tasks --> Keys
     PM -- has many --> User
     User -- has --> Settings
     User -- has many --> Workout
@@ -165,7 +167,6 @@ flowchart TD
 - Before a workout, the sensor and the alert system are set up from the current profile's settings.
 - During a workout, the `HeartRateSensor` fills its own `ReadingLog`, which other classes can read. When the workout ends, those readings are stored in the `Workout`. The sensor's log is cleared whenever a workout starts or the signed-in profile changes.
 - The `AlertSystem` checks each `Reading` live during a workout, and can also scan a whole log afterwards.
-- `Keyboard` lets the workout loop notice single key presses (Enter, q, Space) without stopping to wait for input.
 - The `FileManager` reads and writes both files. It saves after every workout and every profile change.
 
 ## 4. Classes
@@ -183,7 +184,6 @@ flowchart TD
 | `HeartRateSensor` | Produces readings in real time (simulated for now)                                                 |
 | `AlertSystem`     | Checks readings against safe limits                                                                |
 | `FileManager`     | Saves and loads the data file and the settings file                                                |
-| `Keyboard`        | Single-key input that doesn't wait (helper for the workout loop)                                   |
 
 ### `ProfileManager`
 
@@ -328,28 +328,6 @@ Saves and loads all data. It is the only class that reads or writes files.
 
 The whole of each file is rewritten on every save. The data and settings files are saved after every workout and every profile change. The backup file is saved at the backup interval during a workout.
 
-### `Keyboard`
-
-A small helper that lets the workout loop react to single key presses without waiting for Enter. It switches the terminal into "raw" mode (key presses are delivered immediately and aren't echoed) and switches it back afterwards.
-
-- **Public:**
-  - `enableRawMode()`, `disableRawMode()`
-  - `keyPressed()`: true if a key is waiting, without blocking
-  - `readKey()`: returns the key that was pressed
-
-The program must run on **macOS and Windows**. This is the only class that needs platform-specific code, and it chooses the right version at compile time:
-
-```cpp
-#ifdef _WIN32
-    #include <conio.h>      // Windows: _kbhit(), _getch()
-#else
-    #include <termios.h>    // macOS: raw terminal mode
-    #include <unistd.h>
-#endif
-```
-
-The Enter key arrives as `'\r'` on Windows and `'\n'` on macOS, so both are treated as Enter. All other code uses only standard C++, such as `<chrono>`, `<thread>`, `<ctime>` and `<random>`. The project builds from the terminal with `g++` on both systems (MinGW on Windows).
-
 ### Heart Rate Zones
 
 Zones follow the [Cleveland Clinic definition](https://health.clevelandclinic.org/exercise-heart-rate-zones-explained) and are calculated as a percentage of **max HR (220 − age)**.
@@ -468,7 +446,6 @@ READING,1761580815,133
 | `Sensor.h` / `.cpp`         | `HeartRateSensor` |  TBD  |
 | `alert.h` / `.cpp`          | `AlertSystem`     |  TBD  |
 | `Filemanager.h` / `.cpp`    | `FileManager`     |  TBD  |
-| `keyboard.h` / `.cpp`       | `Keyboard`        |  TBD  |
 
 **Data files** (created when the program runs)
 
@@ -485,17 +462,17 @@ READING,1761580815,133
 | Profiles           | Multiple profiles, held by a new `ProfileManager`. Users can create, switch, rename, and delete profiles from a sub-menu.                                                                                                 | Several people can use the same tracker and keep their profiles up to date.                                                                                                 |
 | Profile names      | Must be unique, ignoring upper/lower case and spaces at either end. Also checked when renaming.                                                                                                                           | Profiles are listed, selected, and matched to their settings by name, so two with the same name would clash.                                                                |
 | Deleting profiles  | Asks for confirmation, and removes the profile's workouts and settings too.                                                                                                                                               | Deletion can't be undone, and leftover data would belong to nobody.                                                                                                         |
-| Switching profiles | The sensor's `ReadingLog` is always cleared, and a workout must be stopped first.                                                                                                                                         | Data can never carry over from one profile to another.                                                                                                                      |
+| Switching profiles | The sensor's `ReadingLog` is always cleared, and a workout must finish first.                                                                                                                                             | Data can never carry over from one profile to another.                                                                                                                      |
 | Workouts           | `Workout` is its own class. Each profile has a history of workouts, and a workout needs a signed-in profile.                                                                                                              | Every workout belongs to a known person and can be reviewed later.                                                                                                          |
 | Activity           | A free-text `string` stored on the `Workout`.                                                                                                                                                                             | Users can label workouts however they like (Swim, Run, Jog, …).                                                                                                             |
-| Taking readings    | Automatic at a set interval, Enter for an immediate reading, q or Space to stop. Uses a loop that doesn't wait for input, plus a `Keyboard` helper.                                                                       | The tracker behaves like a real device without the user pressing a key for every reading.                                                                                   |
+| Taking readings    | Automatic at a set interval, with no key input during a workout.                                                                                                                                                          | The tracker behaves like a real device without the user pressing a key for every reading.                                                                                   |
+| Workout length     | The user enters the length in minutes before the workout starts, and the workout ends by itself when the time is up. Stopping early is done with Ctrl+C, followed by "Save it as a finished workout" at the next start-up. | Reading single key presses during the loop needs platform-specific terminal code (`termios` on macOS, `conio.h` on Windows). Reading input on a second thread still needs Enter after every key and adds shared-data risks. Asking for the length up front removes both, at the cost of no on-demand readings and no clean early stop. |
 | Settings           | Each profile has its own `Settings`, stored in its own section of `settings.txt`. New profiles copy the `[default]` section.                                                                                              | Different people need different alert limits and preferences. Settings can be changed now by editing the file, and a settings menu can be added later with little new code. |
 | Saving             | Data loads automatically at start-up. Everything is saved automatically after every workout and every profile change.                                                                                                     | No workout is lost by forgetting to save. Loading at start-up is required, or the first automatic save would overwrite the file with only the current session's data.       |
 | Crash recovery     | During a workout, the workout so far is written to `workout_backup.txt` at a set interval (30 seconds by default). At start-up, a leftover backup lets the user continue the workout, save it as finished, or discard it. | A crash or closed window loses at most one backup interval of readings, and the user decides what happens to the rest.                                                      |
 | Workout duration   | Counts only active time (while the workout loop is running), stored as `activeSeconds`.                                                                                                                                   | A continued workout shouldn't count the time the program was closed.                                                                                                        |
 | Menu               | No manual Save option. Load stays, for reloading after the files are edited by hand.                                                                                                                                      | Everything already saves automatically, so a Save option would do nothing useful. Keeps the menu simple.                                                                    |
 | File access        | Only `FileManager` reads or writes files.                                                                                                                                                                                 | Keeps file formats in one place, and the other classes are easier to test.                                                                                                  |
-| Platforms          | macOS and Windows, built with `g++` from the terminal. Only `Keyboard` has platform-specific code.                                                                                                                        | Keeps the rest of the code portable and easy to test.                                                                                                                       |
 | Resting HR         | The user enters it when creating a profile.                                                                                                                                                                               | It is personal and cannot be worked out from age alone.                                                                                                                     |
 | Heart rate zones   | Cleveland Clinic zones, based on % of max HR (220 − age).                                                                                                                                                                 | A standard, well-known definition.                                                                                                                                          |
 | Alerts             | Limits come from the profile's settings (40 bpm to max HR by default), not the activity. Alerts are shown live during a workout and can be reviewed with option 8.                                                        | The old 200 − age limit would fire during normal hard exercise, and free-text activities can't be mapped to limits.                                                         |
@@ -510,6 +487,7 @@ These features are planned but not a priority for this iteration. The design alr
 
 - **Settings menu:** a new menu option to change the signed-in profile's reading interval and alert limits. `Settings` already has the setters and `FileManager` already saves them, so only the menu task is missing.
 - **Other reading sources:** take readings from a data file or a real sensor instead of the simulator. Only `HeartRateSensor::takeReading()` needs to change.
+- **Key controls during a workout:** single key presses to stop early or take a reading on demand. This would need a small helper class with platform-specific terminal code. The [workout loop](#workout-loop) already pauses every 50 ms, so the helper's key check could be added there.
 
 ## 9. Open Questions
 
