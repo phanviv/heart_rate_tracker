@@ -1,5 +1,6 @@
 #ifndef WORKOUT_H
 #define WORKOUT_H
+#include <ctime>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -30,7 +31,7 @@ public:
 	void setEndTime(time_t newEndTime);
 	void addReading(Reading reading);
 	void addActiveSeconds(long seconds);
-	void printSummary();
+	void printSummary() const;
 };
 
 #endif
