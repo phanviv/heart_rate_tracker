@@ -171,7 +171,7 @@ bool FileManager::save(const ProfileManager &profiles) const
 		out << "PROFILE," << profile.getAge() << ',' << profile.getRestingHR()
 			<< ',' << profile.getName() << '\n';
 
-		vector<Workout> workouts = profile.getWorkouts();
+		const vector<Workout> &workouts = profile.getWorkouts();
 		for (size_t j = 0; j < workouts.size(); j++)
 			writeWorkout(out, workouts[j], workouts[j].getEndTime());
 	}
