@@ -62,10 +62,10 @@ int ReadingLog::size() const {
 int ReadingLog::minBpm() const {
     if (readings.empty()) return 0;
     
-    int minVal = readings[0].getBpm();
+    int minVal = readings[0].getBPM();
     for (const auto& r : readings) {
-        if (r.getBpm() < minVal) {
-            minVal = r.getBpm();
+        if (r.getBPM() < minVal) {
+            minVal = r.getBPM();
         }
     }
     return minVal;
@@ -75,10 +75,10 @@ int ReadingLog::minBpm() const {
 int ReadingLog::maxBpm() const {
     if (readings.empty()) return 0;
     
-    int maxVal = readings[0].getBpm();
+    int maxVal = readings[0].getBPM();
     for (const auto& r : readings) {
-        if (r.getBpm() > maxVal) {
-            maxVal = r.getBpm();
+        if (r.getBPM() > maxVal) {
+            maxVal = r.getBPM();
         }
     }
     return maxVal;
@@ -90,7 +90,7 @@ int ReadingLog::avgBpm() const {
     
     long long sum = 0;
     for (const auto& r : readings) {
-        sum += r.getBpm();
+        sum += r.getBPM();
     }
     return static_cast<int>(sum / readings.size());
 }
@@ -104,7 +104,7 @@ int ReadingLog::avgLast(int n) const {
     
     long long sum = 0;
     for (int i = start; i < static_cast<int>(readings.size()); ++i) {
-        sum += readings[i].getBpm();
+        sum += readings[i].getBPM();
     }
     return static_cast<int>(sum / count);
 }
@@ -121,7 +121,7 @@ int ReadingLog::avgSince(long seconds) const {
     
     for (auto it = readings.rbegin(); it != readings.rend(); ++it) {
         if (it->getTimestamp() >= thresholdTime) {
-            sum += it->getBpm();
+            sum += it->getBPM();
             count++;
         } else {
             break; 

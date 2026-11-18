@@ -9,7 +9,7 @@ private:
     int bpm;
 
 public:
-    Reading(long timestamp, int bpm);
+    Reading(long timestamp = 0, int bpm = 0);
     long getTimestamp() const;
     int getBPM() const;
     void print() const;
