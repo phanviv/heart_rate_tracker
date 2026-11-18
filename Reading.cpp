@@ -8,7 +8,7 @@ Reading::Reading(long timestamp, int bpm) : timestamp(timestamp), bpm(bpm)
 }
 
 // Returns the time the reading was taken
-time_t Reading::getTimestamp() const
+long Reading::getTimestamp() const
 {
     return timestamp;
 }
