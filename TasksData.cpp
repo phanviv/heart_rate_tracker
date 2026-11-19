@@ -205,10 +205,11 @@ void taskManageProfiles(ProfileManager &profiles, FileManager &files, HeartRateS
 
         int choice = readInt("Choice: ", 0, 4);
 
-        if (choice == 0)
+        switch (choice)
+        {
+        case 0:
             return;
-
-        if (choice == 1)
+        case 1:
         {
             string name;
             while (true)
@@ -221,7 +222,7 @@ void taskManageProfiles(ProfileManager &profiles, FileManager &files, HeartRateS
                 cout << "That name is already taken." << endl;
             }
             if (name.empty())
-                continue;
+                break;
 
             int age = readInt("Age: ", 1, 120);
             int restingHR = readInt("Resting HR: ", 20, 250);
@@ -233,8 +234,9 @@ void taskManageProfiles(ProfileManager &profiles, FileManager &files, HeartRateS
             }
             else
                 cout << "Could not create the profile." << endl;
+            break;
         }
-        else if (choice == 2)
+        case 2:
         {
             int index = chooseProfile(profiles, "Switch to");
             if (index >= 0 && profiles.selectProfile(index))
@@ -242,12 +244,13 @@ void taskManageProfiles(ProfileManager &profiles, FileManager &files, HeartRateS
                 sensor.clear(); // no readings carry over between profiles
                 cout << "Signed in to " << profiles.getCurrent().getName() << "." << endl;
             }
+            break;
         }
-        else if (choice == 3)
+        case 3:
         {
             int index = chooseProfile(profiles, "Rename");
             if (index < 0)
-                continue;
+                break;
             string newName = trimText(readText("New name: "));
             if (profiles.renameProfile(index, newName))
             {
@@ -256,17 +259,18 @@ void taskManageProfiles(ProfileManager &profiles, FileManager &files, HeartRateS
             }
             else
                 cout << "Could not rename: the name is empty or already taken." << endl;
+            break;
         }
-        else // choice == 4
+        case 4:
         {
             int index = chooseProfile(profiles, "Delete");
             if (index < 0)
-                continue;
+                break;
             string name = profiles.getProfiles()[index].getName();
             if (!askYesNo("Delete " + name + " and all of their workouts? This cannot be undone"))
             {
                 cout << "Cancelled." << endl;
-                continue;
+                break;
             }
             if (profiles.deleteProfile(index))
             {
@@ -276,6 +280,8 @@ void taskManageProfiles(ProfileManager &profiles, FileManager &files, HeartRateS
                 if (!profiles.hasCurrent())
                     cout << "Nobody is signed in now." << endl;
             }
+            break;
+        }
         }
     }
 }
