@@ -12,9 +12,9 @@
 // ---- Data tasks (task_data.cpp) ----
 void taskManageProfiles(ProfileManager &profiles, FileManager &files, HeartRateSensor &sensor); // 1
 void taskRunWorkout(ProfileManager &profiles, FileManager &files,
-					HeartRateSensor &sensor, AlertSystem &alerts);                             // 2
-void taskViewLatest(ProfileManager &profiles);                                                 // 3
-void taskLoad(ProfileManager &profiles, FileManager &files, HeartRateSensor &sensor);          // 4
+					HeartRateSensor &sensor, AlertSystem &alerts);					  // 2
+void taskViewLatest(ProfileManager &profiles);										  // 3
+void taskLoad(ProfileManager &profiles, FileManager &files, HeartRateSensor &sensor); // 4
 
 // Called once from main() after the data is loaded at start-up. Does nothing
 // when there is no backup file; otherwise offers to continue, save or discard.
@@ -28,9 +28,9 @@ int readInt(const std::string &prompt, int min, int max);
 bool requireProfile(const ProfileManager &profiles);
 
 // ---- Analysis tasks (task_analysis.cpp) ----
-void taskViewHistory(ProfileManager &profiles);                    // 5
-void taskStatistics(ProfileManager &profiles);                     // 6
-void taskZoneSummary(ProfileManager &profiles);                    // 7
-void taskAlerts(ProfileManager &profiles, AlertSystem &alerts);    // 8
+void taskViewHistory(ProfileManager &profiles);					// 5
+void taskStatistics(ProfileManager &profiles);					// 6
+void taskZoneSummary(ProfileManager &profiles);					// 7
+void taskAlerts(ProfileManager &profiles, AlertSystem &alerts); // 8
 
 #endif

@@ -1,24 +1,27 @@
 #include <iostream>
-#include "tasks.h"
+#include "Tasks.h"
 using namespace std;
 
 int main()
 {
     // the four shared objects (see tasks.h for what the names mean)
-    ProfileManager profileManager;       // all profiles
-    FileManager fileManager;          // saves/loads files
-    HeartRateSensor sensor;  // simulated sensor
-    AlertSystem alerts;      // checks for unsafe readings
+    ProfileManager profileManager; // all profiles
+    FileManager fileManager;       // saves/loads files
+    HeartRateSensor sensor;        // simulated sensor
+    AlertSystem alerts;            // checks for unsafe readings
 
-    fileManager.load(profileManager);                              // load everything at start-up
-    recoverWorkout(profileManager, fileManager, sensor, alerts);   // offer to recover an unfinished workout (if any)
+    fileManager.load(profileManager);                            // load everything at start-up
+    recoverWorkout(profileManager, fileManager, sensor, alerts); // offer to recover an unfinished workout (if any)
 
     int choice = -1;
-    while (choice != 0)   // keep showing the menu until the user picks 0
+    while (choice != 0) // keep showing the menu until the user picks 0
     {
-        cout << endl << "=== Heart Rate Tracker ===" << endl;
-        if (profileManager.hasCurrent()) cout << "Signed in as: " << profileManager.getCurrent().getName() << endl;
-        else cout << "Not signed in" << endl;
+        cout << endl
+             << "=== Heart Rate Tracker ===" << endl;
+        if (profileManager.hasCurrent())
+            cout << "Signed in as: " << profileManager.getCurrent().getName() << endl;
+        else
+            cout << "Not signed in" << endl;
         cout << "1. Manage profiles" << endl;
         cout << "2. Start workout" << endl;
         cout << "3. View latest readings" << endl;
@@ -28,29 +31,47 @@ int main()
         cout << "7. Heart rate zones" << endl;
         cout << "8. Alerts" << endl;
         cout << "0. Exit" << endl;
-        choice = readInt("Choice: ", 0, 8);   // only accepts a number from 0 to 8
+        choice = readInt("Choice: ", 0, 8); // only accepts a number from 0 to 8
 
         // options 2, 3 and 5-8 need a signed-in profile
         bool needsProfile = (choice >= 2 && choice <= 3) || (choice >= 5 && choice <= 8);
         if (needsProfile && !profileManager.hasCurrent())
         {
             cout << "Please sign in first (option 1)." << endl;
-            continue;   // go back to the top of the loop (show the menu again)
+            continue; // go back to the top of the loop (show the menu again)
         }
 
         // one case per menu option, each calls one task function
         switch (choice)
         {
-            case 1: taskManageProfiles(profileManager, fileManager, sensor); break;
-            case 2: taskRunWorkout(profileManager, fileManager, sensor, alerts); break;
-            case 3: taskViewLatest(profileManager); break;
-            case 4: taskLoad(profileManager, fileManager, sensor); break;
-            case 5: taskViewHistory(profileManager); break;
-            case 6: taskStatistics(profileManager); break;
-            case 7: taskZoneSummary(profileManager); break;
-            case 8: taskAlerts(profileManager, alerts); break;
-            case 0: cout << "Goodbye!" << endl; break;
+        case 1:
+            taskManageProfiles(profileManager, fileManager, sensor);
+            break;
+        case 2:
+            taskRunWorkout(profileManager, fileManager, sensor, alerts);
+            break;
+        case 3:
+            taskViewLatest(profileManager);
+            break;
+        case 4:
+            taskLoad(profileManager, fileManager, sensor);
+            break;
+        case 5:
+            taskViewHistory(profileManager);
+            break;
+        case 6:
+            taskStatistics(profileManager);
+            break;
+        case 7:
+            taskZoneSummary(profileManager);
+            break;
+        case 8:
+            taskAlerts(profileManager, alerts);
+            break;
+        case 0:
+            cout << "Goodbye!" << endl;
+            break;
         }
     }
-    return 0;  
+    return 0;
 }

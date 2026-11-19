@@ -1,4 +1,4 @@
-#include "tasks.h"
+#include "Tasks.h"
 #include <cctype>
 #include <chrono>
 #include <cstdlib>
@@ -180,7 +180,8 @@ static void runWorkoutLoop(ProfileManager &profiles, FileManager &files,
     else
         cout << "Warning: could not save the data file. The backup was kept." << endl;
 
-    cout << endl << "Workout finished." << endl;
+    cout << endl
+         << "Workout finished." << endl;
     finished.printSummary();
     cout << "Average BPM:             " << sensor.getAverageBPM() << endl;
     cout << "Average, last 30 sec:    " << sensor.getRecentAverageBPMFrom(30) << endl;
@@ -193,7 +194,8 @@ void taskManageProfiles(ProfileManager &profiles, FileManager &files, HeartRateS
 {
     while (true)
     {
-        cout << endl << "--- Profiles ---" << endl;
+        cout << endl
+             << "--- Profiles ---" << endl;
         profiles.printList();
         cout << "1. Create profile" << endl
              << "2. Switch profile" << endl
@@ -377,7 +379,8 @@ void recoverWorkout(ProfileManager &profiles, FileManager &files,
     }
 
     vector<Reading> readings = saved.getReadings();
-    cout << endl << "An unfinished workout was found:" << endl;
+    cout << endl
+         << "An unfinished workout was found:" << endl;
     cout << "  Profile: " << name << "   Activity: " << saved.getActivity() << endl;
     cout << "  Started: " << formatTime(saved.getStartTime())
          << "   Readings: " << readings.size();
