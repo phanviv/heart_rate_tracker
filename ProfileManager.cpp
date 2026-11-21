@@ -1,8 +1,14 @@
+// ProfileManager.cpp
+// Author: Kai Hong
+// Implements ProfileManager: creates, renames, deletes and selects profiles,
+// comparing names without regard to case or surrounding spaces.
+
 #include "ProfileManager.h"
 #include <cctype>
 #include <iostream>
 using namespace std;
 
+// Task: T1 Manage Profiles
 // Removes spaces, tabs and newlines from both ends.
 static string trim(const string &s)
 {
@@ -17,6 +23,7 @@ static string trim(const string &s)
 	return s.substr(start, end - start);
 }
 
+// Task: T1 Manage Profiles
 // Trimmed, lower-case copy of a name, used to compare names.
 static string normalize(const string &name)
 {
@@ -26,10 +33,12 @@ static string normalize(const string &name)
 	return result;
 }
 
+// Task: T1 Manage Profiles
 ProfileManager::ProfileManager() : currentIndex(-1)
 {
 }
 
+// Task: T1 Manage Profiles
 int ProfileManager::findName(const string &name, int skipIndex) const
 {
 	string target = normalize(name);
@@ -41,11 +50,13 @@ int ProfileManager::findName(const string &name, int skipIndex) const
 	return -1;
 }
 
+// Task: T1 Manage Profiles
 bool ProfileManager::validIndex(int index) const
 {
 	return index >= 0 && index < count();
 }
 
+// Task: T1 Manage Profiles
 bool ProfileManager::createProfile(string name, int age, int restingHR)
 {
 	name = trim(name);
@@ -61,6 +72,7 @@ bool ProfileManager::createProfile(string name, int age, int restingHR)
 	return true;
 }
 
+// Task: T1 Manage Profiles
 bool ProfileManager::renameProfile(int index, string newName)
 {
 	newName = trim(newName);
@@ -75,6 +87,7 @@ bool ProfileManager::renameProfile(int index, string newName)
 	return true;
 }
 
+// Task: T1 Manage Profiles
 bool ProfileManager::deleteProfile(int index)
 {
 	if (!validIndex(index))
@@ -90,11 +103,13 @@ bool ProfileManager::deleteProfile(int index)
 	return true;
 }
 
+// Task: T1 Manage Profiles
 bool ProfileManager::nameExists(string name) const
 {
 	return findName(name) != -1;
 }
 
+// Task: T1 Manage Profiles
 bool ProfileManager::selectProfile(int index)
 {
 	if (!validIndex(index))
@@ -104,42 +119,50 @@ bool ProfileManager::selectProfile(int index)
 	return true;
 }
 
+// Task: T4 Load Data
 void ProfileManager::signOut()
 {
 	currentIndex = -1;
 }
 
+// Task: T1 Manage Profiles (used by every task)
 bool ProfileManager::hasCurrent() const
 {
 	return validIndex(currentIndex);
 }
 
+// Task: T1 Manage Profiles (used by every task)
 UserProfile &ProfileManager::getCurrent()
 {
 	return profiles[currentIndex];
 }
 
+// Task: T1 Manage Profiles
 int ProfileManager::getCurrentIndex() const
 {
 	return currentIndex;
 }
 
+// Task: T1 Manage Profiles
 const vector<UserProfile> &ProfileManager::getProfiles() const
 {
 	return profiles;
 }
 
+// Task: T1 Manage Profiles
 int ProfileManager::count() const
 {
 	return (int)profiles.size();
 }
 
+// Task: T4 Load Data
 void ProfileManager::clear()
 {
 	profiles.clear();
 	currentIndex = -1;
 }
 
+// Task: T1 Manage Profiles
 void ProfileManager::printList() const
 {
 	if (profiles.empty())

@@ -1,3 +1,8 @@
+// FileManager.h
+// Author: Kai Hong
+// Declares FileManager, which saves and loads profiles, workouts and readings,
+// and keeps the backup of a workout in progress.
+
 #ifndef FILE_MANAGER_H
 #define FILE_MANAGER_H
 #include <string>

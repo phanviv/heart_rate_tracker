@@ -1,3 +1,8 @@
+// UserProfile.h
+// Author: Kai Hong (declarations); implemented in UserProfile.cpp by Vivian Phan
+// Declares UserProfile: one user's name, age, resting HR, heart rate zones,
+// and list of workouts.
+
 #ifndef USER_PROFILE_H
 #define USER_PROFILE_H
 

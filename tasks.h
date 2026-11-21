@@ -1,3 +1,8 @@
+// tasks.h
+// Author: Vivian Phan
+// Declares the menu task functions and shared helpers used by main.cpp,
+// tasks_data.cpp and task_analysis.cpp (T1-T8, T10 Startup Recovery).
+
 #ifndef TASKS_H
 #define TASKS_H
 
@@ -9,7 +14,7 @@
 // Each task is called from one case of the switch in main().
 // All objects are created in main() and passed in by reference.
 
-// ---- Data tasks (task_data.cpp) ----
+// ---- Data tasks (tasks_data.cpp) ----
 void taskManageProfiles(ProfileManager &profiles, FileManager &files, HeartRateSensor &sensor); // 1
 void taskRunWorkout(ProfileManager &profiles, FileManager &files,
 					HeartRateSensor &sensor, AlertSystem &alerts);                             // 2

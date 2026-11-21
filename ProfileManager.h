@@ -1,3 +1,8 @@
+// ProfileManager.h
+// Author: Kai Hong
+// Declares ProfileManager, which holds every user profile, keeps names
+// unique, and tracks who is signed in (T1 Manage Profiles).
+
 #ifndef PROFILE_MANAGER_H
 #define PROFILE_MANAGER_H
 #include "UserProfile.h"

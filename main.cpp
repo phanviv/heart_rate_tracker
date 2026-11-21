@@ -1,7 +1,13 @@
+// main.cpp
+// Author: Vivian Phan
+// Creates the shared objects, loads the saved data, offers to recover an
+// unfinished workout, and runs the main menu until the user exits.
+
 #include <iostream>
 #include "tasks.h"
 using namespace std;
 
+// Task: main menu (calls T1-T8), T4 Load Data, T10 Startup Recovery
 int main()
 {
     // the four shared objects (see tasks.h for what the names mean)
