@@ -1,3 +1,8 @@
+// Workout.h
+// Author: Kai Hong
+// Declares Workout: one exercise session with its activity, start/end time,
+// active time, and the heart rate readings taken during it.
+
 #ifndef WORKOUT_H
 #define WORKOUT_H
 #include <ctime>

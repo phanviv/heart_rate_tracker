@@ -1,3 +1,8 @@
+// AlertSystem.cpp
+// Author: Kai Hong
+// Implements AlertSystem: sets BPM alert limits for a profile, checks single
+// readings during a workout, and lists every alert in a reading log.
+
 #include "AlertSystem.h"
 #include <ctime>
 #include <iostream>
@@ -6,6 +11,7 @@ using namespace std;
 // TODO: remove this once Settings exists and setLimitsFor() reads from it
 const int DEFAULT_LOW_LIMIT = 40;
 
+// Task: T2 Start Workout, T8 Alerts
 // Sets the alert limits for this profile. A maxHR of 0 (the "max" setting)
 // means the high limit is the user's own max HR (220 - age).
 void AlertSystem::setLimitsFor(const UserProfile &userProfile, int maxHR)
@@ -19,6 +25,7 @@ void AlertSystem::setLimitsFor(const UserProfile &userProfile, int maxHR)
 		highLimit = userProfile.getMaxHR();
 }
 
+// Task: T2 Start Workout, T8 Alerts
 // True when the reading is below the low limit or above the high limit
 bool AlertSystem::isAlert(Reading reading) const
 {
@@ -26,6 +33,7 @@ bool AlertSystem::isAlert(Reading reading) const
 	return bpm < lowLimit || bpm > highLimit;
 }
 
+// Task: T8 Alerts
 // Lists every reading in the log that is outside the limits
 void AlertSystem::printAlerts(const ReadingLog &readingLog) const
 {

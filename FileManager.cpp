@@ -1,3 +1,8 @@
+// FileManager.cpp
+// Author: Kai Hong
+// Implements FileManager: reads and writes heart_data.txt and
+// workout_backup.txt, writing through a temp file so a crash can't corrupt data.
+
 #include "FileManager.h"
 #include <cerrno>
 #include <climits>
@@ -12,6 +17,7 @@ using namespace std;
 
 // ---------- Helpers ----------
 
+// Task: T4 Load Data, T10 Startup Recovery
 // Reads one line and removes a trailing '\r' (files edited on Windows).
 static bool readLine(istream &in, string &line)
 {
@@ -22,6 +28,7 @@ static bool readLine(istream &in, string &line)
 	return true;
 }
 
+// Task: T4 Load Data, T10 Startup Recovery
 // Splits a line into exactly `count` fields. The last field gets the rest
 // of the line, commas included, so names and activities can contain commas.
 // Returns false if the line has too few commas.
@@ -41,6 +48,7 @@ static bool splitFields(const string &line, int count, vector<string> &fields)
 	return true;
 }
 
+// Task: T4 Load Data, T10 Startup Recovery
 static bool toLong(const string &text, long &value)
 {
 	if (text.empty())
@@ -54,6 +62,7 @@ static bool toLong(const string &text, long &value)
 	return true;
 }
 
+// Task: T4 Load Data, T10 Startup Recovery
 static bool toInt(const string &text, int &value)
 {
 	long result;
@@ -63,6 +72,7 @@ static bool toInt(const string &text, int &value)
 	return true;
 }
 
+// Task: T4 Load Data
 // PROFILE,<age>,<restingHR>,<name>
 // Adds the profile and signs in to it. Returns false for a bad line or a
 // name that is already taken.
@@ -76,6 +86,7 @@ static bool parseProfile(const string &line, ProfileManager &profiles)
 	return profiles.createProfile(f[3], age, restingHR);
 }
 
+// Task: T4 Load Data, T10 Startup Recovery
 // WORKOUT,<startTime>,<endTime>,<activeSeconds>,<activity>
 static bool parseWorkout(const string &line, Workout &workout)
 {
@@ -92,6 +103,7 @@ static bool parseWorkout(const string &line, Workout &workout)
 	return true;
 }
 
+// Task: T4 Load Data, T10 Startup Recovery
 // READING,<timestamp>,<bpm>
 static bool parseReading(const string &line, Workout &workout)
 {
@@ -106,6 +118,7 @@ static bool parseReading(const string &line, Workout &workout)
 	return true;
 }
 
+// Task: T2 Start Workout
 // Writes a WORKOUT line followed by its READING lines.
 static void writeWorkout(ostream &out, const Workout &workout, long endTime)
 {
@@ -118,6 +131,7 @@ static void writeWorkout(ostream &out, const Workout &workout, long endTime)
 			<< readings[i].getBPM() << '\n';
 }
 
+// Task: T1 Manage Profiles, T2 Start Workout
 // Writes to a temporary file first, then swaps it in, so a crash while
 // saving never leaves a half-written file behind.
 static bool writeFileSafely(const string &path, const string &contents)
@@ -148,6 +162,7 @@ static bool writeFileSafely(const string &path, const string &contents)
 
 // ---------- FileManager ----------
 
+// Task: T4 Load Data
 FileManager::FileManager()
 	: dataFile("heart_data.txt"),
 	  settingsFile("settings.txt"),
@@ -155,11 +170,13 @@ FileManager::FileManager()
 {
 }
 
+// Task: T4 Load Data
 FileManager::FileManager(string dataFile, string settingsFile, string backupFile)
 	: dataFile(dataFile), settingsFile(settingsFile), backupFile(backupFile)
 {
 }
 
+// Task: T1 Manage Profiles, T2 Start Workout
 bool FileManager::save(const ProfileManager &profiles) const
 {
 	ostringstream out;
@@ -182,6 +199,7 @@ bool FileManager::save(const ProfileManager &profiles) const
 	return writeFileSafely(dataFile, out.str());
 }
 
+// Task: T4 Load Data, T10 Startup Recovery
 bool FileManager::load(ProfileManager &profiles) const
 {
 	// Remember who was signed in, to sign them back in afterwards
@@ -268,6 +286,7 @@ bool FileManager::load(ProfileManager &profiles) const
 	return true;
 }
 
+// Task: T2 Start Workout
 bool FileManager::saveBackup(const string &profileName, const Workout &workout) const
 {
 	ostringstream out;
@@ -276,12 +295,14 @@ bool FileManager::saveBackup(const string &profileName, const Workout &workout) 
 	return writeFileSafely(backupFile, out.str());
 }
 
+// Task: T10 Startup Recovery
 bool FileManager::hasBackup() const
 {
 	ifstream in(backupFile.c_str());
 	return (bool)in;
 }
 
+// Task: T10 Startup Recovery
 bool FileManager::loadBackup(string &profileName, Workout &workout) const
 {
 	ifstream in(backupFile.c_str());
@@ -312,6 +333,7 @@ bool FileManager::loadBackup(string &profileName, Workout &workout) const
 	return true;
 }
 
+// Task: T2 Start Workout, T10 Startup Recovery
 bool FileManager::deleteBackup() const
 {
 	return remove(backupFile.c_str()) == 0 || !hasBackup();

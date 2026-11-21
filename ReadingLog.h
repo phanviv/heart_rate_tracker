@@ -1,3 +1,8 @@
+// ReadingLog.h
+// Author: Kai Hong (declarations); implemented in ReadingLog.cpp by Vivian Phan
+// Declares ReadingLog: an ordered list of Readings with BPM statistics,
+// used by Workout and HeartRateSensor.
+
 #ifndef READING_LOG_H
 #define READING_LOG_H
 #include <vector>

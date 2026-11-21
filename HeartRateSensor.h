@@ -1,3 +1,8 @@
+// HeartRateSensor.h
+// Author: Kai Hong
+// Declares HeartRateSensor, the simulated sensor that produces heart rate
+// readings during a workout (T2 Start Workout, T10 Startup Recovery).
+
 #ifndef HEART_RATE_SENSOR_H
 #define HEART_RATE_SENSOR_H
 #include <ctime>

@@ -1,3 +1,8 @@
+// HeartRateSensor.cpp
+// Author: Kai Hong
+// Implements HeartRateSensor: simulated readings that drift gradually with
+// rare abnormal spikes, plus average-BPM helpers for the workout summary.
+
 #include "HeartRateSensor.h"
 #include <cstdlib>
 
@@ -9,6 +14,7 @@ const int DEFAULT_LOW_LIMIT = 40;
 const int MAX_DRIFT = 3;		   // a normal reading moves at most this many BPM from the last one
 const int MAX_ABNORMAL_OFFSET = 5; // an abnormal reading is 1 to this many BPM outside the limits
 
+// Task: T2 Start Workout
 // Keeps a BPM value between the low and high limits
 static int clampBpm(int bpm, int low, int high)
 {
@@ -19,12 +25,14 @@ static int clampBpm(int bpm, int low, int high)
 	return bpm;
 }
 
+// Task: T2 Start Workout
 // Returns a random whole number from min to max, including both
 static int randomBetween(int min, int max)
 {
 	return min + rand() % (max - min + 1);
 }
 
+// Task: T2 Start Workout
 HeartRateSensor::HeartRateSensor()
 	: running(false),
 	  lastReadingTime(0),
@@ -43,6 +51,7 @@ HeartRateSensor::HeartRateSensor()
 	}
 }
 
+// Task: T2 Start Workout
 void HeartRateSensor::configure(const UserProfile &userProfile)
 {
 	// TODO: take these from userProfile.getSettings() once Settings exists:
@@ -58,6 +67,7 @@ void HeartRateSensor::configure(const UserProfile &userProfile)
 	currentBpm = clampBpm(userProfile.getRestingHR(), lowLimit, highLimit);
 }
 
+// Task: T2 Start Workout
 void HeartRateSensor::start()
 {
 	readings.clear();
@@ -65,6 +75,7 @@ void HeartRateSensor::start()
 	running = true;
 }
 
+// Task: T10 Startup Recovery
 void HeartRateSensor::resume(const ReadingLog &readingLog)
 {
 	readings = readingLog;
@@ -81,16 +92,19 @@ void HeartRateSensor::resume(const ReadingLog &readingLog)
 	running = true;
 }
 
+// Task: T2 Start Workout
 void HeartRateSensor::stop()
 {
 	running = false;
 }
 
+// Task: T2 Start Workout
 bool HeartRateSensor::isRunning() const
 {
 	return running;
 }
 
+// Task: T2 Start Workout
 bool HeartRateSensor::isReadingDue() const
 {
 	if (!running)
@@ -98,6 +112,7 @@ bool HeartRateSensor::isReadingDue() const
 	return difftime(time(nullptr), lastReadingTime) >= intervalSeconds;
 }
 
+// Task: T2 Start Workout
 Reading HeartRateSensor::takeReading()
 {
 	time_t now = time(nullptr);
@@ -126,27 +141,32 @@ Reading HeartRateSensor::takeReading()
 	return reading;
 }
 
+// Task: T1 Manage Profiles, T4 Load Data
 void HeartRateSensor::clear()
 {
 	readings.clear();
 	lastReadingTime = 0;
 }
 
+// Task: T2 Start Workout
 const ReadingLog &HeartRateSensor::getReadings() const
 {
 	return readings;
 }
 
+// Task: T2 Start Workout
 int HeartRateSensor::getAverageBPM() const
 {
 	return readings.avgBpm();
 }
 
+// Task: T2 Start Workout
 int HeartRateSensor::getRecentAverageBPMFrom(float seconds) const
 {
 	return readings.avgSince(static_cast<long>(seconds));
 }
 
+// Task: T2 Start Workout
 int HeartRateSensor::getLastAverageBPM(int numberOfRecentReadings) const
 {
 	return readings.avgLast(numberOfRecentReadings);
