@@ -1,5 +1,7 @@
-//Viviab Phan: holds the menu tasks that only read and report on the saved data
-
+// TaskAnalysis.cpp
+// Author: Vivian Phan
+// Implements the menu tasks that only read and report on the saved data:
+// T5 View Workout History, T6 Statistics, T7 Heart Rate Zones, T8 Alerts.
 
 #include "tasks.h"
 #include <iomanip>
@@ -9,6 +11,7 @@ using namespace std;
 
 // ---------- Helpers ----------
 
+// Task: T6 Statistics, T7 Heart Rate Zones, T8 Alerts
 // Adds every reading of a workout to a log.
 static void appendReadings(ReadingLog &log, const Workout &workout)
 {
@@ -17,6 +20,7 @@ static void appendReadings(ReadingLog &log, const Workout &workout)
 		log.addReading(readings[i]);
 }
 
+// Task: T6 Statistics, T7 Heart Rate Zones, T8 Alerts
 // Every reading from every workout of a profile, in order.
 static ReadingLog allReadings(const UserProfile &profile)
 {
@@ -27,6 +31,7 @@ static ReadingLog allReadings(const UserProfile &profile)
 	return log;
 }
 
+// Task: T6 Statistics
 static void printStats(const string &title, const ReadingLog &log)
 {
 	cout << title << endl;
@@ -43,6 +48,7 @@ static void printStats(const string &title, const ReadingLog &log)
 
 // ---------- Task 5: workout history ----------
 
+// Task: T5 View Workout History
 void taskViewHistory(ProfileManager &profiles)
 {
 	if (!requireProfile(profiles))
@@ -60,13 +66,15 @@ void taskViewHistory(ProfileManager &profiles)
 		 << workouts.size() << " workout(s)):" << endl;
 	for (size_t i = 0; i < workouts.size(); i++)
 	{
-		cout << endl << "Workout " << (i + 1) << endl;
+		cout << endl
+			 << "Workout " << (i + 1) << endl;
 		workouts[i].printSummary();
 	}
 }
 
 // ---------- Task 6: statistics ----------
 
+// Task: T6 Statistics
 void taskStatistics(ProfileManager &profiles)
 {
 	if (!requireProfile(profiles))
@@ -89,6 +97,7 @@ void taskStatistics(ProfileManager &profiles)
 
 // ---------- Task 7: heart rate zones ----------
 
+// Task: T7 Heart Rate Zones
 void taskZoneSummary(ProfileManager &profiles)
 {
 	if (!requireProfile(profiles))
@@ -126,6 +135,7 @@ void taskZoneSummary(ProfileManager &profiles)
 
 // ---------- Task 8: alerts ----------
 
+// Task: T8 Alerts
 void taskAlerts(ProfileManager &profiles, AlertSystem &alerts)
 {
 	if (!requireProfile(profiles))
