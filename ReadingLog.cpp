@@ -1,3 +1,6 @@
+//Vivian Phan
+//Defines a list of reaadings, with the math done on it
+
 #include "ReadingLog.h"
 #include <iostream>
 #include <algorithm>

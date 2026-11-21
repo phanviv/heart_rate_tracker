@@ -1,3 +1,6 @@
+//Vivian Phan: creates the shared objects, loads data, and runs the main menu until the user exits.
+
+
 #include <iostream>
 #include "tasks.h"
 using namespace std;

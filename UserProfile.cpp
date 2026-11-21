@@ -1,3 +1,5 @@
+//Vivian Phan - Creating the useprofile using their name, age and resting HR
+
 #include "UserProfile.h"
 using namespace std;
 

@@ -1,3 +1,6 @@
+//Vivian Phan: one heart reading and the time it was taken and the BPM
+
+
 #include "Reading.h"
 #include <iostream>
 using namespace std;

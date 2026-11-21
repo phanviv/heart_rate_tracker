@@ -1,3 +1,6 @@
+//Vivian Phan
+//list of task functions that main.cpp and two task files share
+
 #ifndef TASKS_H
 #define TASKS_H
 

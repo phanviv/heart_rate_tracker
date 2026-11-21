@@ -1,3 +1,5 @@
+//Vivian Phan: declares the class, with the two valyes private so nothing outside can change them directly
+
 #ifndef READING_H
 #define READING_H
 
