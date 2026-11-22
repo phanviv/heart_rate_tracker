@@ -1,4 +1,11 @@
+<<<<<<< HEAD:tasks_data.cpp
 //Vivian Phan - menu tasks that change/load data profiles
+=======
+// TasksData.cpp
+// Author: Vivian Phan
+// Implements the menu tasks that change or load data (T1-T4), recovery of an
+// unfinished workout (T10 Startup Recovery), and the shared input helpers.
+>>>>>>> 50410a33cd53bfb6fb7a28800b7ac11a608ee61f:TasksData.cpp
 
 #include "tasks.h"
 #include <cctype>
@@ -16,6 +23,7 @@ static const int BACKUP_INTERVAL_SECONDS = 30;
 
 // ---------- Input helpers ----------
 
+// Task: T1 Manage Profiles, T2 Start Workout (input for every menu)
 // Reads a whole line. If the input is closed (Ctrl+D / Ctrl+Z), exits
 // instead of looping forever.
 static string readText(const string &prompt)
@@ -32,6 +40,7 @@ static string readText(const string &prompt)
 	return line;
 }
 
+// Task: T1 Manage Profiles, T2 Start Workout (input for every menu)
 static string trimText(const string &s)
 {
 	size_t start = 0;
@@ -43,6 +52,7 @@ static string trimText(const string &s)
 	return s.substr(start, end - start);
 }
 
+// Task: T1 Manage Profiles, T2 Start Workout (input for every menu)
 // Asks until the user types a whole number between min and max.
 int readInt(const string &prompt, int min, int max)
 {
@@ -57,6 +67,7 @@ int readInt(const string &prompt, int min, int max)
 	}
 }
 
+// Task: T1 Manage Profiles, T10 Startup Recovery
 static bool askYesNo(const string &prompt)
 {
 	while (true)
@@ -70,6 +81,7 @@ static bool askYesNo(const string &prompt)
 	}
 }
 
+// Task: T3 View Latest Readings, T10 Startup Recovery
 static string formatTime(time_t t)
 {
 	char text[20];
@@ -79,6 +91,8 @@ static string formatTime(time_t t)
 
 // ---------- Other helpers ----------
 
+// Task: T2 Start Workout, T3 View Latest Readings, T5-T8 (any task that needs
+// a signed-in profile)
 bool requireProfile(const ProfileManager &profiles)
 {
 	if (!profiles.hasCurrent())
@@ -89,6 +103,7 @@ bool requireProfile(const ProfileManager &profiles)
 	return true;
 }
 
+// Task: T1 Manage Profiles
 // Lists the profiles and asks for one. Returns its 0-based index, or -1 if
 // there are no profiles or the user cancels.
 static int chooseProfile(const ProfileManager &profiles, const string &action)
@@ -103,12 +118,14 @@ static int chooseProfile(const ProfileManager &profiles, const string &action)
 	return choice - 1;
 }
 
+// Task: T1 Manage Profiles
 static void saveOrWarn(const ProfileManager &profiles, const FileManager &files)
 {
 	if (!files.save(profiles))
 		cout << "Warning: could not save the data file." << endl;
 }
 
+// Task: T2 Start Workout, T10 Startup Recovery
 // Builds a Workout from a list of readings.
 static Workout buildWorkout(const string &activity, time_t startTime, time_t endTime,
 							long activeSeconds, const vector<Reading> &readings)
@@ -123,6 +140,7 @@ static Workout buildWorkout(const string &activity, time_t startTime, time_t end
 
 // ---------- Workout loop ----------
 
+// Task: T2 Start Workout, T10 Startup Recovery
 // Runs the workout loop for the current profile. For a recovered workout,
 // pass the old readings in `previous` and the old active time in priorActive.
 static void runWorkoutLoop(ProfileManager &profiles, FileManager &files,
@@ -182,7 +200,8 @@ static void runWorkoutLoop(ProfileManager &profiles, FileManager &files,
 	else
 		cout << "Warning: could not save the data file. The backup was kept." << endl;
 
-	cout << endl << "Workout finished." << endl;
+	cout << endl
+		 << "Workout finished." << endl;
 	finished.printSummary();
 	cout << "Average BPM:             " << sensor.getAverageBPM() << endl;
 	cout << "Average, last 30 sec:    " << sensor.getRecentAverageBPMFrom(30) << endl;
@@ -191,11 +210,13 @@ static void runWorkoutLoop(ProfileManager &profiles, FileManager &files,
 
 // ---------- Task 1: manage profiles ----------
 
+// Task: T1 Manage Profiles
 void taskManageProfiles(ProfileManager &profiles, FileManager &files, HeartRateSensor &sensor)
 {
 	while (true)
 	{
-		cout << endl << "--- Profiles ---" << endl;
+		cout << endl
+			 << "--- Profiles ---" << endl;
 		profiles.printList();
 		cout << "1. Create profile" << endl
 			 << "2. Switch profile" << endl
@@ -282,6 +303,7 @@ void taskManageProfiles(ProfileManager &profiles, FileManager &files, HeartRateS
 
 // ---------- Task 2: start workout ----------
 
+// Task: T2 Start Workout
 void taskRunWorkout(ProfileManager &profiles, FileManager &files,
 					HeartRateSensor &sensor, AlertSystem &alerts)
 {
@@ -303,6 +325,7 @@ void taskRunWorkout(ProfileManager &profiles, FileManager &files,
 
 // ---------- Task 3: view latest readings ----------
 
+// Task: T3 View Latest Readings
 void taskViewLatest(ProfileManager &profiles)
 {
 	if (!requireProfile(profiles))
@@ -328,6 +351,7 @@ void taskViewLatest(ProfileManager &profiles)
 
 // ---------- Task 4: load data ----------
 
+// Task: T4 Load Data
 void taskLoad(ProfileManager &profiles, FileManager &files, HeartRateSensor &sensor)
 {
 	bool ok = files.load(profiles);
@@ -340,6 +364,7 @@ void taskLoad(ProfileManager &profiles, FileManager &files, HeartRateSensor &sen
 
 // ---------- Recovering an unfinished workout ----------
 
+// Task: T10 Startup Recovery
 void recoverWorkout(ProfileManager &profiles, FileManager &files,
 					HeartRateSensor &sensor, AlertSystem &alerts)
 {
@@ -379,11 +404,12 @@ void recoverWorkout(ProfileManager &profiles, FileManager &files,
 	}
 
 	vector<Reading> readings = saved.getReadings();
-	cout << endl << "An unfinished workout was found:" << endl;
+	cout << endl
+		 << "An unfinished workout was found:" << endl;
 	cout << "  Profile: " << name << "   Activity: " << saved.getActivity() << endl;
 	cout << "  Started: " << formatTime(saved.getStartTime())
 		 << "   Readings: " << readings.size();
-		if (!readings.empty())
+	if (!readings.empty())
 	{
 		time_t last = readings.back().getTimestamp();
 		char timeText[10];
