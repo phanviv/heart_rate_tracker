@@ -427,3 +427,7 @@ FodyWeavers.xsd
 # Official VS Code C# Dev Kit Extension exclusion
 #*.lscache
 tracker
+a.out
+tracker
+heart_data.txt
+workout_backup.txt
