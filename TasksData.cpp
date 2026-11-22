@@ -1,11 +1,7 @@
-<<<<<<< HEAD:tasks_data.cpp
-//Vivian Phan - menu tasks that change/load data profiles
-=======
 // TasksData.cpp
 // Author: Vivian Phan
 // Implements the menu tasks that change or load data (T1-T4), recovery of an
 // unfinished workout (T10 Startup Recovery), and the shared input helpers.
->>>>>>> 50410a33cd53bfb6fb7a28800b7ac11a608ee61f:TasksData.cpp
 
 #include "tasks.h"
 #include <cctype>
