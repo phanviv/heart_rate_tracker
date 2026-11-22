@@ -1,2 +1,0 @@
-PROFILE,18,140,Vivian
-PROFILE,19,130,Alex
